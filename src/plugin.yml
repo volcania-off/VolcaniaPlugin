@@ -1,0 +1,7 @@
+name: VolcaniaPlugin
+version: 1.0.0
+main: fr.volcania.volcaniaplugin.Main
+commands:
+  compass:
+    description: Give a compass to the player
+    permission: volcaniaplugin.compass
