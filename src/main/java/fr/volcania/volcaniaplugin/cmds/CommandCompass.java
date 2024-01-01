@@ -8,11 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
+
 
 public class CommandCompass implements CommandExecutor {
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender,Command cmd,String label,String[] args) {
         if(!(sender instanceof Player)) {
             sender.sendMessage("[VolcaniaPlugin] Vous devez être un joueur pour executyer cette commande");
         }else{
@@ -22,7 +22,13 @@ public class CommandCompass implements CommandExecutor {
             meta.setDisplayName(ChatColor.BLUE + "Teleporteur");
             Compass.setItemMeta(meta);
 
-            p.getInventory().addItem(Compass);
+            if(!(p.getInventory().contains(Compass))){
+
+                p.getInventory().setItem(8, Compass);
+            }else{
+                p.sendMessage(ChatColor.RED + "[VolcaniaPlugin] Vous avez deja un téléporteur dans votre inventaire !");
+            }
+
         }
         return false;
     }
