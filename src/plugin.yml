@@ -1,9 +1,15 @@
+api-version: '1.19'
 name: VolcaniaPlugin
 version: 1.0.0
-api-version: '1.19'
 author: glt
 main: fr.volcania.volcaniaplugin.Main
 commands:
   compass:
     description: Give a compass to the player
     permission: volcaniaplugin.compass
+  volcania:
+    description: Help the player to start his adventure
+    permission: volcaniapluin.volcania
+  shop:
+    description: to buy things
+    permission: volcaniaplugin.shop

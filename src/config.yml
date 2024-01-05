@@ -1,0 +1,29 @@
+join:
+  #jointitle = le titre du gros messsage qui s'affiche
+  #joinsubtitle = le soustitre du gross mess qui s'affiche
+  #staffjoinmessage = le message du cnat quand un membre du staff rejoint le serv
+  #join_enter_fade = temps de fade sur l'arrivée du mess
+  #join_quit_fade = temps de fade sur quand le mess part
+  #join_time= temps ou le mess reste à l'écran
+  jointitle: "&cBienvenue %player%"
+  joinsubtitle: "&eBon jeu sur Volcania !"
+  staffjoinmessage: "&bLe membre du staff &4%player% &bviens de rejoindre le serveur !"
+  staffquitmessage: "&bLe membre du staff &4%player% &bviens de quitter le serveur !"
+  join_enter_fade: 15
+  join_time: 40
+  join_quit_fade: 15
+
+shop:
+  inv_name: "&cShop"
+  item_amount: 2
+  not_enouth_money_message: "&4&l[Volcania] &r&eDésolé &l&c%player%, &r&eVous n'avez pas assez d'argent sur votre compte"
+
+  item1: "OAK_LOG"
+  item1_price: 10
+  item1_slot: 0
+  item1_name: "&cBuche en Chene"
+
+  item2: "BIRCH_FENCE"
+  item2_price: 100
+  item2_slot: 3
+  item2_name: "&eBarrière en bouleau"

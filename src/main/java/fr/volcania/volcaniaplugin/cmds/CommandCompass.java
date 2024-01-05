@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class CommandCompass implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender,Command cmd,String label,String[] args) {
+
         if(!(sender instanceof Player)) {
             sender.sendMessage("[VolcaniaPlugin] Vous devez être un joueur pour executyer cette commande");
         }else{

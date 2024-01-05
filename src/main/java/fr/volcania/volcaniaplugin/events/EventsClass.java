@@ -1,27 +1,43 @@
 package fr.volcania.volcaniaplugin.events;
 
+import fr.volcania.volcaniaplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.*;
+import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class EventsClass implements Listener {
 
+    private Main main;
+
+    public EventsClass(Main main) {
+        this.main = main;
+    }
+
     @EventHandler
-    public static void onJoin(PlayerJoinEvent e){
+    public void onJoin(PlayerJoinEvent e){
+        Player p = e.getPlayer();
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+        Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " world");
+
+
+        p.sendTitle(main.getConfig().getString("join.jointitle").replace("&", "§").
+                        replace("%player%", p.getDisplayName()), main.getConfig().getString("join.joinsubtitle")
+                .replace("&", "§").replace("%player%", p.getDisplayName()),
+                main.getConfig().getInt("join.join_enter_fade"), main.getConfig().getInt("join.join_time"),
+                main.getConfig().getInt("join.join_quit_fade"));
         if(e.getPlayer().getWorld().getName().equalsIgnoreCase("world")){
 
             ItemStack Compass = new ItemStack(Material.COMPASS);
@@ -33,16 +49,45 @@ public class EventsClass implements Listener {
                 e.getPlayer().getInventory().setItem(8, Compass);
             }
         }
+        if(p.hasPermission("group.developpeur") || p.hasPermission("group.fondateur") ||
+                p.hasPermission("group.cofondateur") || p.hasPermission("group.admin")){
+            e.setJoinMessage(main.getConfig().getString("join.staffjoinmessage").
+                    replace("%player%", p.getDisplayName()) .replace("&", "§"));
+
+        }else{
+            e.setJoinMessage(null);
+        }
     }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e){
+        Player p = e.getPlayer();
+        if(p.hasPermission("group.developpeur") || p.hasPermission("group.fondateur") ||
+                p.hasPermission("group.cofondateur") || p.hasPermission("group.admin")){
+            e.setQuitMessage(main.getConfig().getString("join.staffquitmessage").
+                    replace("%player%", p.getDisplayName()) .replace("&", "§"));
+
+        }else{
+            e.setQuitMessage(null);
+        }
+    }
+
+
 
     @EventHandler
     public static void onClick(PlayerInteractEvent e){
         Action a = e.getAction();
         Player p = e.getPlayer();
-        Material i = p.getInventory().getItemInMainHand().getType();
+        ItemStack i = e.getItem();
+
+        ItemStack Compass = new ItemStack(Material.COMPASS);
+        ItemMeta meta = Compass.getItemMeta();
+        meta.setDisplayName(ChatColor.BLUE + "Teleporteur");
+        Compass.setItemMeta(meta);
 
         if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK){
-            if (i == Material.COMPASS){
+            if(i == null) return;
+            if (i.equals(Compass)){
                 Inventory inv = Bukkit.createInventory(null, 27, "Téléporteur");
                 ItemStack one = new ItemStack(Material.FIRE_CHARGE);
                 ItemMeta oneM = one.getItemMeta();
@@ -52,7 +97,7 @@ public class EventsClass implements Listener {
 
                 ItemStack two = new ItemStack(Material.SLIME_BLOCK);
                 ItemMeta twoM = two.getItemMeta();
-                twoM.setDisplayName(ChatColor.RED + "Jump");
+                twoM.setDisplayName(ChatColor.RED + "Mini Jeux");
                 two.setItemMeta(twoM);
                 inv.setItem(12, two);
 
@@ -93,7 +138,7 @@ public class EventsClass implements Listener {
 
         ItemStack two = new ItemStack(Material.SLIME_BLOCK);
         ItemMeta twoM = two.getItemMeta();
-        twoM.setDisplayName(ChatColor.RED + "Jump");
+        twoM.setDisplayName(ChatColor.RED + "Mini Jeux");
         two.setItemMeta(twoM);
 
         ItemStack thr = new ItemStack(Material.DIAMOND_PICKAXE);
@@ -106,19 +151,19 @@ public class EventsClass implements Listener {
         fourM.setDisplayName(ChatColor.RED + "Spawn");
         four.setItemMeta(fourM);
 
-        if(invv.contains(one) && invv.contains(two) && invv.contains(thr) && invv.contains(four)){
+        if(invv.contains(one)){
             e.setCancelled(true);
             if(it.equals(one)){
-                Bukkit.dispatchCommand(console, "mv tp " + p.getDisplayName() + " volcania");
+                Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " volcania");
             }
             if(it.equals(two)){
-                Bukkit.dispatchCommand(console, "mv tp " + p.getDisplayName() + " jump");
+                Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " jump");
             }
             if(it.equals(thr)){
-                Bukkit.dispatchCommand(console, "mv tp " + p.getDisplayName() + " minage");
+                Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " minage");
             }
             if(it.equals(four)){
-                Bukkit.dispatchCommand(console, "mv tp " + p.getDisplayName() + " world");
+                Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " world");
             }
         }
         if(invv.contains(Compass)){
@@ -148,5 +193,36 @@ public class EventsClass implements Listener {
 
     }
 
+    @EventHandler
+    public void onDeath(PlayerDeathEvent e) {
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+        Bukkit.dispatchCommand(console, "mv tp " + e.getEntity().getName() + " volcania");
+        ItemStack Compass = new ItemStack(Material.COMPASS);
+        ItemMeta meta = Compass.getItemMeta();
+        meta.setDisplayName(ChatColor.BLUE + "Teleporteur");
+        Compass.setItemMeta(meta);
+
+        e.getDrops().remove(Compass);
+
+    }
+
+    @EventHandler
+    public static void onChat(PlayerCommandPreprocessEvent e){
+        Player p = e.getPlayer();
+        String chat = e.getMessage();
+
+        if(chat.equalsIgnoreCase("/rtp") && p.getWorld().getName().equalsIgnoreCase("volcania")){
+            e.setCancelled(true);
+            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+            Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " volcaniaplay");
+            Bukkit.dispatchCommand(console, "rtp player " + p.getName());
+
+        }
+        if(chat.equalsIgnoreCase("/spawn") && p.getWorld().getName().equalsIgnoreCase("volcaniaplay")){
+            e.setCancelled(true);
+            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+            Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " volcania");
+        }
+    }
 
 }
