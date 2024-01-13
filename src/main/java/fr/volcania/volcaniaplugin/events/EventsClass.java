@@ -153,18 +153,21 @@ public class EventsClass implements Listener {
 
         if(invv.contains(one)){
             e.setCancelled(true);
-            if(it.equals(one)){
-                Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " volcania");
+            if(!(it == null)){
+                if(it.equals(one)){
+                    Main.sendPlayer(p, "volcania");
+                }
+                if(it.equals(two)){
+                    Main.sendPlayer(p, "jump");
+                }
+                if(it.equals(thr)){
+                    Main.sendPlayer(p, "minage");
+                }
+                if(it.equals(four)){
+                    Main.sendPlayer(p, "lobby");
+                }
             }
-            if(it.equals(two)){
-                Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " jump");
-            }
-            if(it.equals(thr)){
-                Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " minage");
-            }
-            if(it.equals(four)){
-                Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " world");
-            }
+
         }
         if(invv.contains(Compass)){
             if(it.equals(Compass)){
