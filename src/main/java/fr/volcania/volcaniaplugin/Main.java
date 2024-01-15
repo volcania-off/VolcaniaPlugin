@@ -1,11 +1,13 @@
 package fr.volcania.volcaniaplugin;
 
+import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.volcania.volcaniaplugin.cmds.CommandCompass;
 import fr.volcania.volcaniaplugin.cmds.CommandShop;
 import fr.volcania.volcaniaplugin.events.EventsClass;
 import fr.volcania.volcaniaplugin.events.ShopEventsClass;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,6 +28,17 @@ public class Main extends JavaPlugin{
 
         player.sendPluginMessage(getPlugin(), "BungeeCord", dataOutput.toByteArray());
     }
+
+    public static void getPlayerServer(Player p) {
+        p = Bukkit.getPlayerExact(p.getName());
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+        out.writeUTF("GetPlayerServer");
+        out.writeUTF(p.getName());
+
+        p.sendPluginMessage(getPlugin(), "BungeeCord", out.toByteArray());
+
+    }
+
 
     @Override
     public void onEnable() {

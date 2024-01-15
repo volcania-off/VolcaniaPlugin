@@ -1,5 +1,7 @@
 package fr.volcania.volcaniaplugin.events;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
 import fr.volcania.volcaniaplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -210,22 +212,18 @@ public class EventsClass implements Listener {
     }
 
     @EventHandler
-    public static void onChat(PlayerCommandPreprocessEvent e){
+    public static void onChat(PlayerCommandPreprocessEvent e) {
         Player p = e.getPlayer();
         String chat = e.getMessage();
-
-        if(chat.equalsIgnoreCase("/rtp") && p.getWorld().getName().equalsIgnoreCase("volcania")){
-            e.setCancelled(true);
-            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-            Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " volcaniaplay");
-            Bukkit.dispatchCommand(console, "rtp player " + p.getName());
-
-        }
-        if(chat.equalsIgnoreCase("/spawn") && p.getWorld().getName().equalsIgnoreCase("volcaniaplay")){
-            e.setCancelled(true);
-            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-            Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " volcania");
+        if(chat.equalsIgnoreCase("/shop")){
+            if(p.getWorld().getName().equalsIgnoreCase("jump") ||
+                    p.getWorld().getName().equalsIgnoreCase("jumplobby") ||
+                    p.getWorld().getName().equalsIgnoreCase("lobby")){
+                e.setCancelled(true);
+                p.sendMessage("§c[VolcaShop] Shop accessible que sur le Volcania ou le Minage.");
+            }else{
+                e.setCancelled(false);
+            }
         }
     }
-
 }
