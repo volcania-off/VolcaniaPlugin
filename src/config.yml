@@ -13,8 +13,28 @@ join:
   join_time: 40
   join_quit_fade: 15
 
+compass:
+  title: '&cTéléporteur - Volcania'
+  already_have_error: '&c[VolcaCompass] Vous avez déjà un Compass dans votre inventaire !'
+  volcania:
+    server_name: volcania
+    item_icon: FIRE_CHARGE
+    item_name: '&cVolcania - PvP Faction'
+  minijeux:
+    server_name: jump
+    item_icon: SLIME_BLOCK
+    item_name: '&cMiniJeux - Lobby'
+  minage:
+    server_name: minage
+    item_icon: DIAMOND_PICKAXE
+    item_name: '&cMinage - Serveur Minage'
+  lobby:
+    server_name: lobby
+    item_icon: BLACK_BED
+    item_name: '&cLobby - Volcania'
+
 shop:
-  inv_name: "&cShop"
+  inv_name: "&cShop - Volcania"
   item_amount: 2
   not_enouth_money_message: "&4&l[Volcania] &r&eDésolé &l&c%player%, &r&eVous n'avez pas assez d'argent sur votre compte"
 

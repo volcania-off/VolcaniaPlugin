@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,7 +23,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class EventsClass implements Listener {
 
-    private Main main;
+    private static Main main;
 
     public EventsClass(Main main) {
         this.main = main;
@@ -32,27 +33,17 @@ public class EventsClass implements Listener {
     public void onJoin(PlayerJoinEvent e){
         Player p = e.getPlayer();
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-        Bukkit.dispatchCommand(console, "mv tp " + p.getName() + " world");
-
 
         p.sendTitle(main.getConfig().getString("join.jointitle").replace("&", "§").
                         replace("%player%", p.getDisplayName()), main.getConfig().getString("join.joinsubtitle")
                 .replace("&", "§").replace("%player%", p.getDisplayName()),
                 main.getConfig().getInt("join.join_enter_fade"), main.getConfig().getInt("join.join_time"),
                 main.getConfig().getInt("join.join_quit_fade"));
-        if(e.getPlayer().getWorld().getName().equalsIgnoreCase("world")){
 
-            ItemStack Compass = new ItemStack(Material.COMPASS);
-            ItemMeta meta = Compass.getItemMeta();
-            meta.setDisplayName(ChatColor.BLUE + "Teleporteur");
-            Compass.setItemMeta(meta);
+        main.givePlayerCompass(p);
 
-            if(!(e.getPlayer().getInventory().contains(Compass))){
-                e.getPlayer().getInventory().setItem(8, Compass);
-            }
-        }
-        if(p.hasPermission("group.developpeur") || p.hasPermission("group.fondateur") ||
-                p.hasPermission("group.cofondateur") || p.hasPermission("group.admin")){
+        if(p.hasPermission("group.dev") || p.hasPermission("group.fonda") ||
+                p.hasPermission("group.cofonda") || p.hasPermission("group.admin")){
             e.setJoinMessage(main.getConfig().getString("join.staffjoinmessage").
                     replace("%player%", p.getDisplayName()) .replace("&", "§"));
 
@@ -64,17 +55,15 @@ public class EventsClass implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e){
         Player p = e.getPlayer();
-        if(p.hasPermission("group.developpeur") || p.hasPermission("group.fondateur") ||
-                p.hasPermission("group.cofondateur") || p.hasPermission("group.admin")){
+        if(p.hasPermission("group.dev") || p.hasPermission("group.fonda") ||
+                p.hasPermission("group.cofonda") || p.hasPermission("group.admin")){
             e.setQuitMessage(main.getConfig().getString("join.staffquitmessage").
-                    replace("%player%", p.getDisplayName()) .replace("&", "§"));
+                    replace("%player%", p.getDisplayName()).replace("&", "§"));
 
         }else{
             e.setQuitMessage(null);
         }
     }
-
-
 
     @EventHandler
     public static void onClick(PlayerInteractEvent e){
@@ -84,109 +73,87 @@ public class EventsClass implements Listener {
 
         ItemStack Compass = new ItemStack(Material.COMPASS);
         ItemMeta meta = Compass.getItemMeta();
-        meta.setDisplayName(ChatColor.BLUE + "Teleporteur");
+        meta.setDisplayName(main.getConfig().getString("compass.title").replace("&", "§"));
         Compass.setItemMeta(meta);
 
         if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK){
             if(i == null) return;
             if (i.equals(Compass)){
-                Inventory inv = Bukkit.createInventory(null, 27, "Téléporteur");
-                ItemStack one = new ItemStack(Material.FIRE_CHARGE);
-                ItemMeta oneM = one.getItemMeta();
-                oneM.setDisplayName(ChatColor.RED + "Volcania");
-                one.setItemMeta(oneM);
-                inv.setItem(10, one);
-
-                ItemStack two = new ItemStack(Material.SLIME_BLOCK);
-                ItemMeta twoM = two.getItemMeta();
-                twoM.setDisplayName(ChatColor.RED + "Mini Jeux");
-                two.setItemMeta(twoM);
-                inv.setItem(12, two);
-
-                ItemStack thr = new ItemStack(Material.DIAMOND_PICKAXE);
-                ItemMeta thrM = thr.getItemMeta();
-                thrM.setDisplayName(ChatColor.RED + "Minage");
-                thr.setItemMeta(thrM);
-                inv.setItem(14, thr);
-
-                ItemStack four = new ItemStack(Material.BLACK_BED);
-                ItemMeta fourM = four.getItemMeta();
-                fourM.setDisplayName(ChatColor.RED + "Spawn");
-                four.setItemMeta(fourM);
-                inv.setItem(16, four);
-
-                p.openInventory(inv);
+                main.openPlayerCompass(p);
             }
         }
     }
     @EventHandler
     public static void onInvClickEvent(InventoryClickEvent e){
+        Player p = (Player) e.getWhoClicked();
+        Inventory inv = e.getClickedInventory();
+        ItemStack it = e.getCurrentItem();
+
         ItemStack Compass = new ItemStack(Material.COMPASS);
         ItemMeta meta = Compass.getItemMeta();
-        meta.setDisplayName(ChatColor.BLUE + "Teleporteur");
+        meta.setDisplayName(main.getConfig().getString("compass.title").replace("&", "§"));
         Compass.setItemMeta(meta);
 
-        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-
-        Player p = (Player) e.getWhoClicked();
-        ItemStack it = e.getCurrentItem();
-        InventoryAction a = e.getAction();
-        Inventory invv = e.getClickedInventory();
-
-        ItemStack one = new ItemStack(Material.FIRE_CHARGE);
+        ItemStack one = new ItemStack(Material.valueOf(main.getConfig().getString("compass.volcania.item_icon").replace
+                ("Material.", "")));
         ItemMeta oneM = one.getItemMeta();
-        oneM.setDisplayName(ChatColor.RED + "Volcania");
+        oneM.setDisplayName(main.getConfig().getString("compass.volcania.item_name").replace("&", "§"));
         one.setItemMeta(oneM);
+        inv.setItem(10, one);
 
-        ItemStack two = new ItemStack(Material.SLIME_BLOCK);
+        ItemStack two = new ItemStack(Material.valueOf(main.getConfig().getString("compass.minijeux.item_icon").replace
+                ("Material.", "")));
         ItemMeta twoM = two.getItemMeta();
-        twoM.setDisplayName(ChatColor.RED + "Mini Jeux");
+        twoM.setDisplayName(main.getConfig().getString("compass.minijeux.item_name").replace("&", "§"));
         two.setItemMeta(twoM);
+        inv.setItem(12, two);
 
-        ItemStack thr = new ItemStack(Material.DIAMOND_PICKAXE);
+        ItemStack thr = new ItemStack(Material.valueOf(main.getConfig().getString("compass.minage.item_icon").replace
+                ("Material.", "")));
         ItemMeta thrM = thr.getItemMeta();
-        thrM.setDisplayName(ChatColor.RED + "Minage");
+        thrM.setDisplayName(main.getConfig().getString("compass.minage.item_name").replace("&", "§"));
         thr.setItemMeta(thrM);
+        inv.setItem(14, thr);
 
-        ItemStack four = new ItemStack(Material.BLACK_BED);
+        ItemStack four = new ItemStack(Material.valueOf(main.getConfig().getString("compass.lobby.item_icon").replace
+                ("Material.", "")));
         ItemMeta fourM = four.getItemMeta();
-        fourM.setDisplayName(ChatColor.RED + "Spawn");
+        fourM.setDisplayName(main.getConfig().getString("compass.lobby.item_name").replace("&", "§"));
         four.setItemMeta(fourM);
+        inv.setItem(16, four);
 
-        if(invv.contains(one)){
+        if(inv.contains(one)){
             e.setCancelled(true);
             if(!(it == null)){
                 if(it.equals(one)){
-                    Main.sendPlayer(p, "volcania");
+                    Main.sendPlayer(p, main.getConfig().getString("compass.volcania.server_name"));
                 }
                 if(it.equals(two)){
-                    Main.sendPlayer(p, "jump");
+                    Main.sendPlayer(p, main.getConfig().getString("compass.minijeux.server_name"));
                 }
                 if(it.equals(thr)){
-                    Main.sendPlayer(p, "minage");
+                    Main.sendPlayer(p, main.getConfig().getString("compass.minage.server_name"));
                 }
                 if(it.equals(four)){
-                    Main.sendPlayer(p, "lobby");
+                    Main.sendPlayer(p, main.getConfig().getString("compass.lobby.server_name"));
                 }
             }
 
         }
-        if(invv.contains(Compass)){
-            if(it.equals(Compass)){
+        if(inv.contains(Compass)) {
+            if (it.equals(Compass)) {
                 e.setCancelled(true);
-            }else{
+            } else {
                 e.setCancelled(false);
             }
         }
-
-
     }
 
     @EventHandler
     public static void onDrop(PlayerDropItemEvent e){
         ItemStack Compass = new ItemStack(Material.COMPASS);
         ItemMeta meta = Compass.getItemMeta();
-        meta.setDisplayName(ChatColor.BLUE + "Teleporteur");
+        meta.setDisplayName(main.getConfig().getString("compass.title").replace("&", "§"));
         Compass.setItemMeta(meta);
 
         ItemStack item = e.getItemDrop().getItemStack();
@@ -200,15 +167,19 @@ public class EventsClass implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
-        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-        Bukkit.dispatchCommand(console, "mv tp " + e.getEntity().getName() + " volcania");
         ItemStack Compass = new ItemStack(Material.COMPASS);
         ItemMeta meta = Compass.getItemMeta();
-        meta.setDisplayName(ChatColor.BLUE + "Teleporteur");
+        meta.setDisplayName(main.getConfig().getString("compass.title").replace("&", "§"));
         Compass.setItemMeta(meta);
 
         e.getDrops().remove(Compass);
 
+    }
+
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent e){
+        Player p = (Player)e.getPlayer();
+        main.givePlayerCompass(p);
     }
 
     @EventHandler

@@ -1,5 +1,6 @@
-package fr.volcania.volcaniaplugin;
+package fr.volcania.volcaniaplugin.cmds;
 
+import fr.volcania.volcaniaplugin.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
