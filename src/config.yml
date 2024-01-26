@@ -1,10 +1,4 @@
 join:
-  #jointitle = le titre du gros messsage qui s'affiche
-  #joinsubtitle = le soustitre du gross mess qui s'affiche
-  #staffjoinmessage = le message du cnat quand un membre du staff rejoint le serv
-  #join_enter_fade = temps de fade sur l'arrivée du mess
-  #join_quit_fade = temps de fade sur quand le mess part
-  #join_time= temps ou le mess reste à l'écran
   jointitle: "&cBienvenue %player%"
   joinsubtitle: "&eBon jeu sur Volcania !"
   staffjoinmessage: "&bLe membre du staff &4%player% &bviens de rejoindre le serveur !"
@@ -15,23 +9,23 @@ join:
 
 compass:
   title: '&cTéléporteur - Volcania'
-  already_have_error: '&c[VolcaCompass] Vous avez déjà un Compass dans votre inventaire !'
+  already_have_error: '&c[VolcaCompass] &rVous avez déjà un Compass dans votre inventaire !'
   volcania:
     server_name: volcania
     item_icon: FIRE_CHARGE
-    item_name: '&cVolcania - PvP Faction'
+    item_name: '&cPvP Faction - Volcania'
   minijeux:
     server_name: jump
     item_icon: SLIME_BLOCK
-    item_name: '&cMiniJeux - Lobby'
+    item_name: '&cLobby - MiniJeux'
   minage:
     server_name: minage
     item_icon: DIAMOND_PICKAXE
-    item_name: '&cMinage - Serveur Minage'
+    item_name: '&cServeur Minage - Minage'
   lobby:
     server_name: lobby
     item_icon: BLACK_BED
-    item_name: '&cLobby - Volcania'
+    item_name: '&cLobby - Lobby Général'
 
 shop:
   inv_name: "&cShop - Volcania"

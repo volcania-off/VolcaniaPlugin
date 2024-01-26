@@ -40,7 +40,11 @@ public class EventsClass implements Listener {
                 main.getConfig().getInt("join.join_enter_fade"), main.getConfig().getInt("join.join_time"),
                 main.getConfig().getInt("join.join_quit_fade"));
 
-        main.givePlayerCompass(p);
+        if(!p.getInventory().getItem(8).getItemMeta().getDisplayName().equalsIgnoreCase(main.getConfig().
+                getString("compass.title").replace("&", "§"))){
+            main.givePlayerCompass(p);
+        }
+
 
         if(p.hasPermission("group.dev") || p.hasPermission("group.fonda") ||
                 p.hasPermission("group.cofonda") || p.hasPermission("group.admin")){

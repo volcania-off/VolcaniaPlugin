@@ -1,7 +1,5 @@
 package fr.volcania.volcaniaplugin.events;
 
-import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.User;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
@@ -37,6 +35,7 @@ public class ShopEventsClass implements Listener {
         if(p.getOpenInventory().getTitle().equalsIgnoreCase(main.getConfig().getString("shop.inv_name").replace
                 ("%player%", p.getDisplayName()).replace("&", "§"))){
             e.setCancelled(true);
+
             for(int i = 1; i <= main.getConfig().getInt("shop.item_amount"); i++) {
                 ItemStack item = new ItemStack(Material.valueOf(main.getConfig().getString("shop.item" + i).replace("Material.", "")));
                 ItemMeta itemMeta = item.getItemMeta();
@@ -44,12 +43,15 @@ public class ShopEventsClass implements Listener {
                 lore.add(main.getConfig().getString("shop.item" + i + "_price").replace("&", "§") + "$");
                 itemMeta.setLore(lore);
                 itemMeta.setDisplayName(main.getConfig().getString("shop.item" + i + "_name").replace("&", "§"));
+
                 item.setItemMeta(itemMeta);
+
+
                 if(it.equals(item)){
                     if(Economy.getMoney(p.getName()) >= main.getConfig().getInt("shop.item"+ i + "_price")){
                         ItemStack item2 = new ItemStack(Material.valueOf(main.getConfig().getString("shop.item" + i).replace("Material.", "")));
-                        p.getInventory().addItem(item2);
                         Economy.setMoney(p.getName(), Economy.getMoney(p.getName()) - main.getConfig().getInt("shop.item"+ i + "_price"));
+                        p.getInventory().addItem(item2);
                     }else{
                         p.closeInventory();
                         p.sendMessage(main.getConfig().getString("shop.not_enouth_money_message").replace("&", "§").replace("%player%", p.getDisplayName()));

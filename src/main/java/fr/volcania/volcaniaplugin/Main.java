@@ -17,6 +17,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+
 public class Main extends JavaPlugin{
 
     public static Plugin getPlugin() {
@@ -69,6 +71,25 @@ public class Main extends JavaPlugin{
         }
     }
 
+    public void openShop(Player p){
+        Inventory inv = Bukkit.createInventory(null, 27, getConfig().getString("shop.inv_name")
+                .replace("%player%", p.getDisplayName()).replace("&", "§"));
+        for(int i = 1; i <= getConfig().getInt("shop.item_amount"); i++) {
+            ItemStack item = new ItemStack(Material.valueOf(getConfig().getString("shop.item" + i)
+                    .replace("Material.", "")));
+            ItemMeta itemMeta = item.getItemMeta();
+            ArrayList<String> lore = new ArrayList<String>();
+            lore.add(getConfig().getString("shop.item" + i + "_price") + "$");
+            itemMeta.setLore(lore);
+            itemMeta.setDisplayName(getConfig().getString("shop.item" + i + "_name")
+                    .replace("&", "§"));
+            item.setItemMeta(itemMeta);
+
+            inv.setItem(getConfig().getInt("shop.item" + i + "_slot"), item);
+        }
+        p.openInventory(inv);
+    }
+
     public static void sendPlayer(Player player, String serverInString) {
         ByteArrayDataOutput dataOutput = ByteStreams.newDataOutput();
         dataOutput.writeUTF("Connect");
@@ -76,17 +97,6 @@ public class Main extends JavaPlugin{
 
         player.sendPluginMessage(getPlugin(), "BungeeCord", dataOutput.toByteArray());
     }
-
-    public static void getPlayerServer(Player p) {
-        p = Bukkit.getPlayerExact(p.getName());
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("GetPlayerServer");
-        out.writeUTF(p.getName());
-
-        p.sendPluginMessage(getPlugin(), "BungeeCord", out.toByteArray());
-
-    }
-
 
     @Override
     public void onEnable() {

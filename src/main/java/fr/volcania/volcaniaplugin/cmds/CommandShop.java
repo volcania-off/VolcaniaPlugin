@@ -25,19 +25,7 @@ public class CommandShop implements CommandExecutor {
             sender.sendMessage("§c[Volcania] Vous devez être un joueur !");
         }
         Player p = (Player)sender;
-        Inventory inv = Bukkit.createInventory(null, 27, main.getConfig().getString("shop.inv_name").replace("%player%", p.getDisplayName()).replace("&", "§"));
-        for(int i = 1; i <= main.getConfig().getInt("shop.item_amount"); i++) {
-            ItemStack item = new ItemStack(Material.valueOf(main.getConfig().getString("shop.item" + i).replace("Material.", "")));
-            ItemMeta itemMeta = item.getItemMeta();
-            ArrayList<String> lore = new ArrayList<String>();
-            lore.add(main.getConfig().getString("shop.item" + i + "_price") + "$");
-            itemMeta.setLore(lore);
-            itemMeta.setDisplayName(main.getConfig().getString("shop.item" + i + "_name").replace("&", "§"));
-            item.setItemMeta(itemMeta);
-
-            inv.setItem(main.getConfig().getInt("shop.item" + i + "_slot"), item);
-        }
-        p.openInventory(inv);
+        main.openShop(p);
         return false;
     }
 
