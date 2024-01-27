@@ -33,7 +33,7 @@ public class EventsClass implements Listener {
     public void onJoin(PlayerJoinEvent e){
         Player p = e.getPlayer();
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-
+        
         p.sendTitle(main.getConfig().getString("join.jointitle").replace("&", "§").
                         replace("%player%", p.getDisplayName()), main.getConfig().getString("join.joinsubtitle")
                 .replace("&", "§").replace("%player%", p.getDisplayName()),
