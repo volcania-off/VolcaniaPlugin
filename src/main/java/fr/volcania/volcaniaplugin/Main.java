@@ -71,6 +71,8 @@ public class Main extends JavaPlugin{
         }
     }
 
+    /*test*/
+
     public void openShop(Player p){
         Inventory inv = Bukkit.createInventory(null, 27, getConfig().getString("shop.inv_name")
                 .replace("%player%", p.getDisplayName()).replace("&", "§"));
