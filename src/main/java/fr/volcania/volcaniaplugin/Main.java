@@ -76,6 +76,7 @@ public class Main extends JavaPlugin{
     public void openShop(Player p){
         Inventory inv = Bukkit.createInventory(null, 27, getConfig().getString("shop.inv_name")
                 .replace("%player%", p.getDisplayName()).replace("&", "§"));
+
         for(int i = 1; i <= getConfig().getInt("shop.item_amount"); i++) {
             ItemStack item = new ItemStack(Material.valueOf(getConfig().getString("shop.item" + i)
                     .replace("Material.", "")));
@@ -89,6 +90,7 @@ public class Main extends JavaPlugin{
 
             inv.setItem(getConfig().getInt("shop.item" + i + "_slot"), item);
         }
+
         p.openInventory(inv);
     }
 

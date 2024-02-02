@@ -46,7 +46,6 @@ public class ShopEventsClass implements Listener {
 
                 item.setItemMeta(itemMeta);
 
-
                 if(it.equals(item)){
                     if(Economy.getMoney(p.getName()) >= main.getConfig().getInt("shop.item"+ i + "_price")){
                         ItemStack item2 = new ItemStack(Material.valueOf(main.getConfig().getString("shop.item" + i).replace("Material.", "")));
