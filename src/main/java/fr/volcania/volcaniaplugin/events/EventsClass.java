@@ -40,8 +40,12 @@ public class EventsClass implements Listener {
                 main.getConfig().getInt("join.join_enter_fade"), main.getConfig().getInt("join.join_time"),
                 main.getConfig().getInt("join.join_quit_fade"));
 
-        if(!p.getInventory().getItem(8).getItemMeta().getDisplayName().equalsIgnoreCase(main.getConfig().
-                getString("compass.title").replace("&", "§"))){
+        ItemStack Compass = new ItemStack(Material.COMPASS);
+        ItemMeta meta = Compass.getItemMeta();
+        meta.setDisplayName(main.getConfig().getString("compass.title").replace("&", "§"));
+        Compass.setItemMeta(meta);
+
+        if(!(p.getInventory().contains(Compass))){
             main.givePlayerCompass(p);
         }
 
